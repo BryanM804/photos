@@ -1,32 +1,44 @@
 package launcher;
 
 import application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
-import java.util.Scanner;
-
-public final class Launcher
+public final class Launcher extends javafx.application.Application
 {
+    private static Stage mainStage;
+    private static Scene loginScene;
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("../view/Login.fxml"));
+
+        VBox root = (VBox)loader.load();
+        loginScene = new Scene(root);
+        primaryStage.setScene(loginScene);
+        primaryStage.setTitle("Login");
+        primaryStage.show();
+
+        mainStage = primaryStage;
+    }
+
     public static void main()
     {
-        // TODO Load up JavaFX login screen here
+        // This is the javafx launch method not the one below
+        launch();
+    }
 
-        String username; // These will be retrieved from the GUI, but for debug I'm getting them from the command line
-        String password; // not implementing this
-
-        Scanner scanner = new Scanner(System.in);
-        String[] input = scanner.nextLine().split(" ");
-
-        username = input[0];
-
-        Session session = new Session(username);
-        launch(session);
+    public static void openLogin() {
+        mainStage.setScene(loginScene);
+        mainStage.setTitle("Login");
     }
 
     public static void launch(Session session)
     {
-        // TODO Close login GUI
-
         Application application = new Application(session);
-        application.openGUI();
+        application.openGUI(mainStage);
     }
 }

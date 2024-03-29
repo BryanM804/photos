@@ -2,6 +2,10 @@ package application;
 
 import application.album.Album;
 import application.album.Photo;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import launcher.Launcher;
 import launcher.Session;
 import util.FileUtil;
@@ -71,9 +75,21 @@ public final class Application
     /**
      * Opens the main application GUI
      */
-    public void openGUI()
+    public void openGUI(Stage mainStage)
     {
-        // TODO JavaFX
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Launcher.class.getResource("../view/Application.fxml"));
+
+        try {
+            BorderPane root = (BorderPane)loader.load();
+            Scene mainScene = new Scene(root);
+            mainStage.setScene(mainScene);
+            mainStage.setTitle("Photos");
+            mainStage.setX(300.0);
+
+        } catch(Exception e) {
+            System.out.println(e); // handle this better later
+        }
     }
 
     /**
@@ -107,11 +123,9 @@ public final class Application
      */
     public void logout()
     {
-        // TODO Close GUI
-
         instance = null;
         session = null;
 
-        Launcher.main();
+        Launcher.openLogin();
     }
 }
