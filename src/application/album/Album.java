@@ -3,7 +3,11 @@ package application.album;
 import application.Application;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public final class Album
@@ -42,6 +46,60 @@ public final class Album
         }
     }
 
+    public void addPhoto(Photo photo)
+    {
+        this.photos.add(photo);
+    }
+
+    public void removePhoto(Photo photo)
+    {
+        this.photos.remove(photo);
+    }
+
+    public void movePhoto(Album dst,
+                          Photo photo)
+    {
+        File photoFile = photo.getPhotoFile();
+        File dstFile = dst.getAlbumFile();
+
+        try
+        {
+            Files.move(photoFile.toPath(), dstFile.toPath());
+        } catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+        removePhoto(photo);
+        dst.addPhoto(photo);
+    }
+
+    public int getNumPhotos()
+    {
+        return this.photos.size();
+    }
+
+    /**
+     * @return An array of two {@link LocalDateTime}s where a[0] is the earliest and a[1] is the latest
+     * or null if no photos in the album
+     */
+    public LocalDateTime[] getDateRanges()
+    {
+        if (this.photos.size() <= 0)
+        {
+            return null;
+        }
+
+        List<Photo> clone = new ArrayList<>(this.photos);
+
+        clone.sort(Comparator.comparing(Photo::getTimestamp));
+
+        LocalDateTime first = clone.get(0).getTimestamp();
+        LocalDateTime last = clone.get(clone.size() - 1).getTimestamp();
+
+        return new LocalDateTime[] { first, last };
+    }
+
     public String getName()
     {
         return this.name;
@@ -50,5 +108,11 @@ public final class Album
     public File getAlbumFile()
     {
         return this.albumFile;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.name;
     }
 }

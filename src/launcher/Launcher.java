@@ -12,11 +12,12 @@ public final class Launcher extends javafx.application.Application
     private static Scene loginScene;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws Exception
+    {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("../view/Login.fxml"));
+        loader.setLocation(getClass().getResource("../javafx/view/Login.fxml"));
 
-        VBox root = (VBox)loader.load();
+        VBox root = loader.load();
         loginScene = new Scene(root);
         primaryStage.setScene(loginScene);
         primaryStage.setTitle("Login");
@@ -31,7 +32,8 @@ public final class Launcher extends javafx.application.Application
         launch();
     }
 
-    public static void openLogin() {
+    public static void openLogin()
+    {
         mainStage.setScene(loginScene);
         mainStage.setTitle("Login");
     }

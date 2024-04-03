@@ -7,6 +7,8 @@ public final class Session
     private final String username;
     private final File userFile;
 
+    private final boolean admin;
+
     public Session(String username)
     {
         this.username = username;
@@ -23,6 +25,8 @@ public final class Session
         }
 
         this.userFile = userFile;
+
+        this.admin = username.equalsIgnoreCase("admin");
     }
 
     public String getUsername()
@@ -33,5 +37,10 @@ public final class Session
     public File getUserFile()
     {
         return this.userFile;
+    }
+
+    public boolean isAdmin()
+    {
+        return this.admin;
     }
 }
