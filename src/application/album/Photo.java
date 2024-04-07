@@ -40,6 +40,16 @@ public final class Photo
         return this.tags;
     }
 
+    public String getCaption() 
+    {
+        return this.caption;
+    }
+
+    public void setCaption(String newCaption) 
+    {
+        this.caption = newCaption;
+    }
+
     public static boolean isPhoto(File file)
     {
         if (file.isDirectory())

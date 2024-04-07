@@ -110,9 +110,18 @@ public final class Album
         return this.albumFile;
     }
 
+    public List<Photo> getPhotos()
+    {
+        return this.photos;
+    }
+
     @Override
     public String toString()
     {
-        return this.name;
+        if (this.getNumPhotos() == 0) {
+            return this.name + "\n\tPhotos: " + this.getNumPhotos();
+        } else {
+            return this.name + "\n\tPhotos: " + this.getNumPhotos() + "\n\tFrom: " + this.getDateRanges()[0] + "\n\tTo: " + this.getDateRanges()[1];
+        }
     }
 }

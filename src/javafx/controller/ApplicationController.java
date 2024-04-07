@@ -3,42 +3,44 @@ package javafx.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import application.Application;
 import application.album.Album;
 import application.album.AlbumManager;
+import application.album.Photo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.dialogs.TagDialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 public class ApplicationController {
     
     private static ApplicationController instance;
 
-    // This is all very cluttered because fxml only lets you have a javafx.controller on the root
-    // element and I did not feel like making nested elements right now since the UI might change
-    // around later and I will likely do that later when we are more set in stone with things.
-
     @FXML Button albumCButton;
     @FXML Button albumRNButton;
     @FXML Button albumDelButton;
-    @FXML Button searchSubmitButton;
-    @FXML Button logoutButton;
     @FXML Button albumOpenButton;
+    @FXML Button logoutButton;
     @FXML Button addTagButton;
     @FXML Button addPhotoButton;
     @FXML Button remTagButton;
     @FXML Button remPhotoButton;
+    @FXML Button copyPhotoButton;
+    @FXML Button movePhotoButton;
+    @FXML Button searchButton;
     @FXML Button changeCapButton;
     @FXML ListView<Album> albumList;
     @FXML ListView<String> tagList;
-    @FXML GridPane albumContainer;
-    @FXML TextField searchInput;
+    @FXML ListView<Photo> photoList;
+    @FXML VBox photoBar;
+    @FXML Label tagLabel;
 
     public ApplicationController()
     {
@@ -58,16 +60,54 @@ public class ApplicationController {
     @FXML
     public void initialize()
     {
-        albumRNButton.setVisible(false);
-        albumDelButton.setVisible(false);
-
         this.albumList.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> albumRNButton.setVisible(newValue != null)
+                (observable, oldValue, newValue) -> {
+                    albumRNButton.setVisible(newValue != null);
+                    albumDelButton.setVisible(newValue != null);
+                }
         );
 
-        this.albumList.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> albumDelButton.setVisible(newValue != null)
+        this.photoList.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> {
+                addTagButton.setVisible(newValue != null);
+                remPhotoButton.setVisible(newValue != null);
+                tagList.setVisible(newValue != null);
+                tagLabel.setVisible(newValue != null);
+                changeCapButton.setVisible(newValue != null);
+            }
         );
+
+        this.tagList.getSelectionModel().selectedItemProperty().addListener(
+            (observably, oldValue, newValue) -> {
+                remTagButton.setVisible(newValue != null);
+            }
+        );
+
+        this.photoList.setCellFactory(listView -> new ListCell<Photo>() {
+            ImageView imageView = new ImageView();
+
+            @Override
+            public void updateItem(Photo photo, boolean empty) {
+                super.updateItem(photo, empty);
+
+                if (empty) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    Image image = new Image(photo.getPhotoFile().toURI().toString(),
+                                            160, // width
+                                            160, // height
+                                            true, // preserve ratio
+                                            true); // smooth rescaling
+                    setPrefWidth(300);
+                    setMaxWidth(300);
+                    setWrapText(true);
+                    imageView.setImage(image);
+                    setGraphic(imageView);
+                    setText(photo.getCaption());
+                }
+            }
+        });
     }
 
     public void updateAlbumList(List<Album> albums)
@@ -76,32 +116,26 @@ public class ApplicationController {
         albumList.setItems(displayAlbums);
     }
 
-    public void updateTagList(List<String> tags) {
-        ObservableList<String> displayTags = FXCollections.observableArrayList(tags);
+    public void updateTagList(Photo selectedPhoto) {
+        List<String> tagStrings = new ArrayList<String>();
+        selectedPhoto.getTags().entrySet().forEach(entry -> {
+            tagStrings.add(entry.getKey() + ": " + entry.getValue());
+        });
+
+        ObservableList<String> displayTags = FXCollections.observableArrayList(tagStrings);
         tagList.setItems(displayTags);
     }
 
-    public void updateAlbumView() {
-        // Fill the grid with clickable photos (maybe)
-        // How I envision this is to have you click an album from the list and
-        // From there it fills the center with the thumbnails of the photos which
-        // can be selected to change attributes
+    public void updatePhotoList(List<Photo> photos) {
+        ObservableList<Photo> displayPhotos = FXCollections.observableArrayList(photos);
+        this.photoList.setItems(displayPhotos);
     }
 
-    public void handleSearchSubmit(ActionEvent e)
-    {
-        Button pButton = (Button) e.getSource();
-        if (pButton == this.searchSubmitButton)
-        {
-            String search = this.searchInput.getText();
-
-            List<Album> matches = Application.getInstance().getAlbumManager().getLoadedAlbums()
-                    .stream()
-                    .filter(a -> a.getName().toLowerCase().contains(search.toLowerCase()))
-                    .collect(Collectors.toList());
-
-            this.updateAlbumList(matches);
-        }
+    public void handleSearchClick(ActionEvent e) {
+        // This will switch to the search scene or open a new window
+        // Since it is supposed to display the searched images
+        // in a similar way to the main albums screen I think
+        // it will be easier to make it it's own thing
     }
 
     public void handleAlbumCreate(ActionEvent e)
@@ -110,6 +144,7 @@ public class ApplicationController {
         if (pButton == this.albumCButton)
         {
             TextInputDialog cAlbumPrompt = new TextInputDialog("Album");
+            cAlbumPrompt.setTitle("Create Album");
             cAlbumPrompt.setHeaderText("Enter a name for the album:");
 
             Optional<String> res = cAlbumPrompt.showAndWait();
@@ -124,10 +159,10 @@ public class ApplicationController {
         Button pButton = (Button) e.getSource();
         if (pButton == this.albumRNButton)
         {
-            TextInputDialog renameAlbumPrompt = new TextInputDialog("Album");
-            renameAlbumPrompt.setHeaderText("Enter a new name for the album:");
-
             Album selectedAlbum = this.albumList.getSelectionModel().getSelectedItem();
+
+            TextInputDialog renameAlbumPrompt = new TextInputDialog(selectedAlbum.getName());
+            renameAlbumPrompt.setHeaderText("Enter a new name for the album:");
 
             Optional<String> res = renameAlbumPrompt.showAndWait();
             res.ifPresent(s -> Application.getInstance().getAlbumManager().renameAlbum(selectedAlbum, s));
@@ -164,33 +199,69 @@ public class ApplicationController {
     }
 
     public void handleAlbumOpen(ActionEvent e) {
-        // Request album data from backend and update photo javafx.view
+        Button pButton = (Button) e.getSource();
+    
+        if (pButton == this.albumOpenButton) {
+            Album selected = this.albumList.getSelectionModel().getSelectedItem();
+            
+            this.updatePhotoList(selected.getPhotos());
+            this.photoBar.setVisible(true);
+        }
     }
 
     public void handleAddTag(ActionEvent e) {
-        // Add a tag to selected photo
+        Button pButton = (Button) e.getSource();
+
+        if (pButton == addTagButton) {
+            Photo selectedPhoto = photoList.getSelectionModel().getSelectedItem();
+            
+            TagDialog tDialog = new TagDialog(pButton.getScene().getWindow());
+            Optional<String[]> res = tDialog.showAndWait();
+            res.ifPresent(s -> System.out.println(s)); 
+            // If the tag type exists it will do nothing if not it adds
+            // to the list of tag types
+        }
     }
 
     public void handleRemoveTag(ActionEvent e) {
-        // Remove tag from photo
+        Button pButton = (Button) e.getSource();
+
+        if (pButton == remTagButton) {
+            
+        }
     }
 
     public void handleAddPhoto(ActionEvent e) {
-        // Open add photo dialog probably
+        Button pButton = (Button) e.getSource();
+
+        if (pButton == addPhotoButton) {
+            
+        }
     }
 
     public void handleRemovePhoto(ActionEvent e) {
-        // Remove photo from album
+        Button pButton = (Button) e.getSource();
+
+        if (pButton == remPhotoButton) {
+            
+        }
     }
 
     public void handleChangeCaption(ActionEvent e)
     {
         Button pButton = (Button)e.getSource();
         if (pButton == changeCapButton) {
-            TextInputDialog captionPrompt = new TextInputDialog("Caption");
+            Photo selectedPhoto = photoList.getSelectionModel().getSelectedItem();
+            TextInputDialog captionPrompt = new TextInputDialog(selectedPhoto.getCaption());
+            captionPrompt.setTitle("Change Caption");
             captionPrompt.setHeaderText("Enter a new caption for the photo");
-            captionPrompt.showAndWait();
-            // tell the app to change the caption when this closes
+            Optional<String> res = captionPrompt.showAndWait();
+
+            res.ifPresent( s -> {
+                selectedPhoto.setCaption(s);
+                Album selectedAlbum = this.albumList.getSelectionModel().getSelectedItem();
+                this.updatePhotoList(selectedAlbum.getPhotos());
+            });
         }
     }
 

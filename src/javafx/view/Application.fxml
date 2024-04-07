@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -13,41 +12,30 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx.controller.ApplicationController">
-   <center>
-      <GridPane fx:id="photoContainer" BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-      </GridPane>
-   </center>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx.controller.ApplicationController">
    <right>
-      <VBox prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="photoBar" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
          <children>
-            <ToolBar orientation="VERTICAL" prefHeight="194.0" prefWidth="200.0">
+            <ToolBar orientation="VERTICAL" prefHeight="225.0" prefWidth="210.0">
               <items>
-                <Button fx:id="addPhotoButton" onAction="#handleAddPhoto" mnemonicParsing="false" prefWidth="200.0" text="Add Photo" />
-                  <Button fx:id="remPhotoButton" onAction="#handleRemovePhoto" mnemonicParsing="false" prefWidth="200.0" text="Remove Photo" />
-                  <Button fx:id="changeCapButton" onAction="#handleChangeCaption" mnemonicParsing="false" prefWidth="200.0" text="Change Caption" />
-                  <Button fx:id="addTagButton" onAction="#handleAddTag" mnemonicParsing="false" prefWidth="200.0" text="Add Tag" />
-                  <Button fx:id="remTagButton" onAction="#handleRemoveTag" mnemonicParsing="false" prefWidth="200.0" text="Remove Selected Tag" />
+                <Button fx:id="addPhotoButton" mnemonicParsing="false" onAction="#handleAddPhoto" prefWidth="200.0" text="Add Photo" />
+                  <Button fx:id="copyPhotoButton" mnemonicParsing="false" prefWidth="200.0" text="Copy Photo" />
+                  <Button fx:id="movePhotoButton" mnemonicParsing="false" prefWidth="200.0" text="Move Photo" />
+                  <Button fx:id="remPhotoButton" mnemonicParsing="false" onAction="#handleRemovePhoto" prefWidth="200.0" text="Remove Photo" visible="false" />
+                  <Button fx:id="changeCapButton" mnemonicParsing="false" onAction="#handleChangeCaption" prefWidth="200.0" text="Change Caption" visible="false" />
+                  <Button fx:id="addTagButton" mnemonicParsing="false" onAction="#handleAddTag" prefWidth="200.0" text="Add Tag" visible="false" />
+                  <Button fx:id="remTagButton" mnemonicParsing="false" onAction="#handleRemoveTag" prefWidth="200.0" text="Remove Selected Tag" visible="false" />
               </items>
             </ToolBar>
-            <Label text="Tags">
+            <Label fx:id="tagLabel" text="Tags" visible="false">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <ListView fx:id="tagList" prefHeight="400.0" prefWidth="200.0" />
+            <ListView fx:id="tagList" prefHeight="400.0" prefWidth="200.0" visible="false" />
          </children>
       </VBox>
    </right>
@@ -60,7 +48,7 @@
                </font>
             </Label>
             <ListView fx:id="albumList" editable="true" prefHeight="580.0" prefWidth="200.0" />
-            <Button fx:id="albumOpenButton" onAction="#handleAlbumOpen" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="150.0" text="Open Album" textAlignment="CENTER">
+            <Button fx:id="albumOpenButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleAlbumOpen" prefWidth="150.0" text="Open Album" textAlignment="CENTER">
                <VBox.margin>
                   <Insets left="10.0" top="10.0" />
                </VBox.margin>
@@ -71,8 +59,7 @@
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <items>
-            <TextField fx:id="searchInput" promptText="Search" />
-            <Button fx:id="searchSubmitButton" onAction="#handleSearchSubmit" mnemonicParsing="false" text="Submit" />
+            <Button fx:id="searchButton" mnemonicParsing="false" onAction="#handleSearchClick" prefWidth="200.0" text="Search for Photos" />
          </items>
       </ToolBar>
    </top>
@@ -88,18 +75,21 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="logoutButton" onAction="#handleLogout" alignment="CENTER_RIGHT" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Logout" textAlignment="RIGHT" GridPane.columnIndex="3">
+            <Button fx:id="logoutButton" alignment="CENTER_RIGHT" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#handleLogout" text="Logout" textAlignment="RIGHT" GridPane.columnIndex="3">
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </Button>
             <Button fx:id="albumCButton" mnemonicParsing="false" onAction="#handleAlbumCreate" prefHeight="25.0" prefWidth="150.0" text="Create Album" />
-            <Button fx:id="albumRNButton" mnemonicParsing="false" onAction="#handleAlbumRename" prefHeight="25.0" prefWidth="150.0" text="Rename Album" GridPane.columnIndex="1" />
-            <Button fx:id="albumDelButton" mnemonicParsing="false" onAction="#handleAlbumDelete" prefHeight="25.0" prefWidth="150.0" text="Delete Album" GridPane.columnIndex="2" />
+            <Button fx:id="albumRNButton" mnemonicParsing="false" onAction="#handleAlbumRename" prefHeight="25.0" prefWidth="150.0" text="Rename Album" visible="false" GridPane.columnIndex="1" />
+            <Button fx:id="albumDelButton" mnemonicParsing="false" onAction="#handleAlbumDelete" prefHeight="25.0" prefWidth="150.0" text="Delete Album" visible="false" GridPane.columnIndex="2" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </GridPane>
    </bottom>
+   <center>
+      <ListView fx:id="photoList" maxWidth="650.0" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>
