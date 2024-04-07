@@ -1,25 +1,25 @@
 package javafx.dialogs;
 
-import javafx.controller.TagDialogController;
+import javafx.controller.SearchDialogController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.stage.Modality;
 import javafx.stage.Window;
 
-public class TagDialog extends Dialog<String[]>{
-
-    public TagDialog(Window owner) {
+public class SearchDialog extends Dialog<Boolean>{
+    
+    public SearchDialog(Window owner) {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("../view/TagDialog.fxml"));
+        loader.setLocation(getClass().getResource("../view/SearchDialog.fxml"));
        
         try {
             DialogPane root = loader.load();
-            TagDialogController controller = loader.getController();
+            SearchDialogController controller = loader.getController();
             setDialogPane(root);
             initOwner(owner);
             initModality(Modality.APPLICATION_MODAL);
-            setTitle("Add Tag");
+            setTitle("Search for photos");
 
             setResultConverter(controller::convertResult);
         } catch (Exception e) {

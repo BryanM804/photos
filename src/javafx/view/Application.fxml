@@ -22,8 +22,8 @@
             <ToolBar orientation="VERTICAL" prefHeight="225.0" prefWidth="210.0">
               <items>
                 <Button fx:id="addPhotoButton" mnemonicParsing="false" onAction="#handleAddPhoto" prefWidth="200.0" text="Add Photo" />
-                  <Button fx:id="copyPhotoButton" mnemonicParsing="false" prefWidth="200.0" text="Copy Photo" />
-                  <Button fx:id="movePhotoButton" mnemonicParsing="false" prefWidth="200.0" text="Move Photo" />
+                  <Button fx:id="copyPhotoButton" mnemonicParsing="false" onAction="#handleCopyPhoto" prefWidth="200.0" text="Copy Photo" visible="false" />
+                  <Button fx:id="movePhotoButton" mnemonicParsing="false" onAction="#handleMovePhoto" prefWidth="200.0" text="Move Photo" visible="false" />
                   <Button fx:id="remPhotoButton" mnemonicParsing="false" onAction="#handleRemovePhoto" prefWidth="200.0" text="Remove Photo" visible="false" />
                   <Button fx:id="changeCapButton" mnemonicParsing="false" onAction="#handleChangeCaption" prefWidth="200.0" text="Change Caption" visible="false" />
                   <Button fx:id="addTagButton" mnemonicParsing="false" onAction="#handleAddTag" prefWidth="200.0" text="Add Tag" visible="false" />

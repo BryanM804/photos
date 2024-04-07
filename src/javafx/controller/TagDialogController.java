@@ -21,7 +21,7 @@ public class TagDialogController {
 
     @FXML
     public void initialize() {
-
+        
     }
 
     public void handleCYOClick(ActionEvent e) {

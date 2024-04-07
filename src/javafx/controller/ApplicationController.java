@@ -10,6 +10,7 @@ import application.album.AlbumManager;
 import application.album.Photo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.dialogs.SearchDialog;
 import javafx.dialogs.TagDialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -71,6 +72,8 @@ public class ApplicationController {
             (observable, oldValue, newValue) -> {
                 addTagButton.setVisible(newValue != null);
                 remPhotoButton.setVisible(newValue != null);
+                copyPhotoButton.setVisible(newValue != null);
+                movePhotoButton.setVisible(newValue != null);
                 tagList.setVisible(newValue != null);
                 tagLabel.setVisible(newValue != null);
                 changeCapButton.setVisible(newValue != null);
@@ -113,7 +116,7 @@ public class ApplicationController {
     public void updateAlbumList(List<Album> albums)
     {
         ObservableList<Album> displayAlbums = FXCollections.observableArrayList(albums);
-        albumList.setItems(displayAlbums);
+        this.albumList.setItems(displayAlbums);
     }
 
     public void updateTagList(Photo selectedPhoto) {
@@ -123,7 +126,7 @@ public class ApplicationController {
         });
 
         ObservableList<String> displayTags = FXCollections.observableArrayList(tagStrings);
-        tagList.setItems(displayTags);
+        this.tagList.setItems(displayTags);
     }
 
     public void updatePhotoList(List<Photo> photos) {
@@ -132,10 +135,16 @@ public class ApplicationController {
     }
 
     public void handleSearchClick(ActionEvent e) {
-        // This will switch to the search scene or open a new window
-        // Since it is supposed to display the searched images
-        // in a similar way to the main albums screen I think
-        // it will be easier to make it it's own thing
+        Button pButton = (Button) e.getSource();
+
+        if (pButton == searchButton) {
+            SearchDialog searchDialog = new SearchDialog(pButton.getScene().getWindow());
+            Optional<Boolean> res = searchDialog.showAndWait();
+
+            res.ifPresent(b -> {
+                if (b) updateAlbumList(Application.getInstance().getAlbumManager().getLoadedAlbums());
+            });
+        }
     }
 
     public void handleAlbumCreate(ActionEvent e)
@@ -243,7 +252,70 @@ public class ApplicationController {
         Button pButton = (Button) e.getSource();
 
         if (pButton == remPhotoButton) {
-            
+            Photo selectedPhoto = photoList.getSelectionModel().getSelectedItem();
+            Album selectedAlbum = albumList.getSelectionModel().getSelectedItem();
+
+            selectedAlbum.removePhoto(selectedPhoto);
+            updatePhotoList(selectedAlbum.getPhotos());
+            updateAlbumList(Application.getInstance().getAlbumManager().getLoadedAlbums());
+        }
+    }
+
+    public void handleCopyPhoto(ActionEvent e) {
+        Button pButton = (Button) e.getSource();
+
+        if (pButton == copyPhotoButton) {
+            Photo selectedPhoto = photoList.getSelectionModel().getSelectedItem();
+
+            TextInputDialog destDialog = new TextInputDialog();
+            destDialog.setTitle("Copy photo to album");
+            destDialog.setContentText("Enter the name of the album you would like to copy to");
+            destDialog.setHeaderText(null);
+            Optional<String> res = destDialog.showAndWait();
+
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Invalid album entry!");
+            errorAlert.setTitle("Invalid album");
+
+            res.ifPresent(s -> {
+                Album enteredAlbum = Application.getInstance().getAlbumManager().getAlbumByName(s);
+                if (enteredAlbum == null) {
+                    errorAlert.showAndWait();
+                } else {
+                    enteredAlbum.addPhoto(selectedPhoto);
+                    updateAlbumList(Application.getInstance().getAlbumManager().getLoadedAlbums());
+                }
+            });
+        }
+    }
+
+    public void handleMovePhoto(ActionEvent e) {
+        Button pButton = (Button) e.getSource();
+
+        if (pButton == movePhotoButton) {
+            Photo selectedPhoto = photoList.getSelectionModel().getSelectedItem();
+            Album selectedAlbum = albumList.getSelectionModel().getSelectedItem();
+
+            TextInputDialog destDialog = new TextInputDialog();
+            destDialog.setTitle("Copy photo to album");
+            destDialog.setContentText("Enter the name of the album you would like to move to");
+            destDialog.setHeaderText(null);
+            Optional<String> res = destDialog.showAndWait();
+
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Invalid album entry!");
+            errorAlert.setTitle("Invalid album");
+
+            res.ifPresent(s -> {
+                Album enteredAlbum = Application.getInstance().getAlbumManager().getAlbumByName(s);
+                if (enteredAlbum == null) {
+                    errorAlert.showAndWait();
+                } else {
+                    enteredAlbum.movePhoto(enteredAlbum, selectedPhoto);
+                    updatePhotoList(selectedAlbum.getPhotos());
+                    updateAlbumList(Application.getInstance().getAlbumManager().getLoadedAlbums());
+                }
+            });
         }
     }
 

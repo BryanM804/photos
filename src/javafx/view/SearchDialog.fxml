@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<DialogPane headerText="Search for photos in your albums" maxHeight="600.0" minHeight="600.0" prefHeight="600.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx.controller.SearchDialogController">
+   <buttonTypes>
+      <ButtonType fx:constant="CLOSE" />
+   </buttonTypes>
+   <header>
+      <VBox prefHeight="555.0" prefWidth="1189.0">
+         <children>
+            <ButtonBar prefHeight="40.0" prefWidth="200.0">
+              <buttons>
+                  <TextField fx:id="searchInput" prefHeight="25.0" prefWidth="200.0" />
+                <Button fx:id="searchSubmitButton" mnemonicParsing="false" onAction="#handleSearchClick" prefWidth="0.0" text="Search" />
+              </buttons>
+            </ButtonBar>
+            <ListView fx:id="photoList" prefHeight="470.0" prefWidth="1184.0" />
+            <AnchorPane prefHeight="25.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="createAlbumButton" layoutX="1014.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleCreateAlbum" text="Create Album From Results" />
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </header>
+</DialogPane>

@@ -59,10 +59,12 @@ public final class AlbumManager
         }
     }
 
-    public void createAlbum(String name)
+    public Album createAlbum(String name)
     {
         Album album = new Album(name);
         this.loadedAlbums.add(album);
+
+        return album;
     }
 
     public void renameAlbum(Album album,
@@ -82,6 +84,15 @@ public final class AlbumManager
         }
 
         this.loadedAlbums.remove(album);
+    }
+
+    public Album getAlbumByName(String name) {
+        for (Album a : loadedAlbums) {
+            if (a.getName().equals(name)) 
+                return a;
+        }
+
+        return null;
     }
 
     public List<Album> getLoadedAlbums()
