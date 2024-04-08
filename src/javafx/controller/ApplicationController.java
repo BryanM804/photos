@@ -1,5 +1,6 @@
 package javafx.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
 public class ApplicationController {
     
@@ -27,7 +29,6 @@ public class ApplicationController {
     @FXML Button albumCButton;
     @FXML Button albumRNButton;
     @FXML Button albumDelButton;
-    @FXML Button albumOpenButton;
     @FXML Button logoutButton;
     @FXML Button addTagButton;
     @FXML Button addPhotoButton;
@@ -65,6 +66,11 @@ public class ApplicationController {
                 (observable, oldValue, newValue) -> {
                     albumRNButton.setVisible(newValue != null);
                     albumDelButton.setVisible(newValue != null);
+                    addPhotoButton.setVisible(newValue != null);
+                    photoBar.setVisible(newValue != null);
+                    if (newValue != null) {
+                        updatePhotoList(albumList.getSelectionModel().getSelectedItem().getPhotos());
+                    }
                 }
         );
 
@@ -211,17 +217,6 @@ public class ApplicationController {
         updateAlbumList(Application.getInstance().getAlbumManager().getLoadedAlbums());
     }
 
-    public void handleAlbumOpen(ActionEvent e) {
-        Button pButton = (Button) e.getSource();
-    
-        if (pButton == this.albumOpenButton) {
-            Album selected = this.albumList.getSelectionModel().getSelectedItem();
-            
-            this.updatePhotoList(selected.getPhotos());
-            this.photoBar.setVisible(true);
-        }
-    }
-
     public void handleAddTag(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -249,7 +244,15 @@ public class ApplicationController {
         Button pButton = (Button) e.getSource();
 
         if (pButton == addPhotoButton) {
-            
+            FileChooser photoPicker = new FileChooser();
+            File photoFile = photoPicker.showOpenDialog(pButton.getScene().getWindow());
+
+            if (photoFile != null) {
+                Album selectedAlbum = albumList.getSelectionModel().getSelectedItem();
+                selectedAlbum.addPhoto(new Photo(photoFile), false);
+                updateAlbumList(Application.getInstance().getAlbumManager().getLoadedAlbums());
+                updatePhotoList(selectedAlbum.getPhotos());
+            }
         }
     }
 

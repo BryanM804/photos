@@ -21,7 +21,7 @@
          <children>
             <ToolBar orientation="VERTICAL" prefHeight="275.0" prefWidth="210.0">
               <items>
-                <Button fx:id="addPhotoButton" mnemonicParsing="false" onAction="#handleAddPhoto" prefWidth="200.0" text="Add Photo" />
+                <Button fx:id="addPhotoButton" mnemonicParsing="false" onAction="#handleAddPhoto" prefWidth="200.0" text="Add Photo" visible="false" />
                   <Button fx:id="copyPhotoButton" mnemonicParsing="false" onAction="#handleCopyPhoto" prefWidth="200.0" text="Copy Photo" visible="false" />
                   <Button fx:id="movePhotoButton" mnemonicParsing="false" onAction="#handleMovePhoto" prefWidth="200.0" text="Move Photo" visible="false" />
                   <Button fx:id="remPhotoButton" mnemonicParsing="false" onAction="#handleRemovePhoto" prefWidth="200.0" text="Remove Photo" visible="false" />
@@ -48,11 +48,6 @@
                </font>
             </Label>
             <ListView fx:id="albumList" editable="true" prefHeight="580.0" prefWidth="200.0" />
-            <Button fx:id="albumOpenButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleAlbumOpen" prefWidth="150.0" text="Open Album" textAlignment="CENTER">
-               <VBox.margin>
-                  <Insets left="10.0" top="10.0" />
-               </VBox.margin>
-            </Button>
          </children>
       </VBox>
    </left>
