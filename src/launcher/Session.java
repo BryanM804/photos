@@ -1,6 +1,8 @@
 package launcher;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 public final class Session
 {
@@ -42,5 +44,16 @@ public final class Session
     public boolean isAdmin()
     {
         return this.admin;
+    }
+
+    public List<String> getAllUsernames() {
+        if (!this.isAdmin()) return null;
+
+        File workingDir = new File("").getAbsoluteFile();
+        File users = new File(workingDir, "data/");
+
+        String [] userStrings = users.list();
+
+        return Arrays.asList(userStrings);
     }
 }

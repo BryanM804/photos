@@ -21,9 +21,6 @@ public final class Launcher extends javafx.application.Application
         loginScene = new Scene(root);
         primaryStage.setScene(loginScene);
         primaryStage.setTitle("Login");
-        primaryStage.setOnCloseRequest(event -> {
-            // save info
-        });
         primaryStage.show();
 
         mainStage = primaryStage;
@@ -44,7 +41,7 @@ public final class Launcher extends javafx.application.Application
     public static void launch(Session session)
     {
         Application application = new Application(session);
-        application.openGUI(mainStage);
+        application.openGUI(mainStage, session.isAdmin());
 
         Runtime.getRuntime().addShutdownHook(new Thread(() ->
         {

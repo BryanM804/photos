@@ -28,10 +28,15 @@ public final class Application
     /**
      * Opens the main application GUI
      */
-    public void openGUI(Stage mainStage)
+    public void openGUI(Stage mainStage, boolean isAdmin)
     {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Launcher.class.getResource("../javafx/view/Application.fxml"));
+
+        if (isAdmin) {
+            loader.setLocation(Launcher.class.getResource("../javafx/view/Admin.fxml"));
+        } else {
+            loader.setLocation(Launcher.class.getResource("../javafx/view/Application.fxml"));
+        }
 
         try
         {
@@ -45,7 +50,7 @@ public final class Application
             throw new RuntimeException(e);
         }
 
-        ApplicationController.getInstance().updateAlbumList(this.albumManager.getLoadedAlbums());
+        if (!isAdmin) ApplicationController.getInstance().updateAlbumList(this.albumManager.getLoadedAlbums());
     }
 
     /**

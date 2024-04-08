@@ -345,6 +345,10 @@ public class ApplicationController {
 
     public void handleLogout(ActionEvent e)
     {
-        Application.getInstance().logout();
+        Button pButton = (Button) e.getSource();
+
+        if (pButton == logoutButton) {
+            Application.getInstance().logout();
+        }
     }
 }
