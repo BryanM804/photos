@@ -13,7 +13,7 @@ public final class Application
 {
     private static Application instance;
 
-    private AlbumManager albumManager;
+    private final AlbumManager albumManager;
     private Session session;
 
     public Application(Session session)
@@ -85,10 +85,12 @@ public final class Application
     }
 
     /**
-     * Closes the application, logs the user out, and displays the login screen
+     * Closes & saves the application, logs the user out, and displays the login screen
      */
     public void logout()
     {
+        this.albumManager.save();
+
         instance = null;
         session = null;
 

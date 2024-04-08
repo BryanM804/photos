@@ -11,8 +11,8 @@ import java.util.Map;
 
 public final class Photo implements Serializable
 {
-    private final File photoFile;
-    private final File dataFile;
+    private File photoFile;
+    private File dataFile;
     private final LocalDateTime timestamp;
     private final Map<String, String> tags = new HashMap<>();
 
@@ -52,15 +52,31 @@ public final class Photo implements Serializable
             Photo $this = (Photo) ois.readObject();
 
             this.tags.putAll($this.tags);
+            this.caption = $this.caption;
         } catch (IOException | ClassNotFoundException e)
         {
-            System.out.printf("Warning: No data found for photo %s. ");
+            System.out.printf("Warning: No data found for photo %s.\n", this.photoFile.getName());
         }
     }
 
     public File getPhotoFile()
     {
         return this.photoFile;
+    }
+
+    public File getDataFile()
+    {
+        return this.dataFile;
+    }
+
+    public void setPhotoFile(File file)
+    {
+        this.photoFile = file;
+    }
+
+    public void setDataFile(File file)
+    {
+        this.dataFile = file;
     }
 
     public LocalDateTime getTimestamp()

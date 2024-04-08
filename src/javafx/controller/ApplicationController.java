@@ -86,17 +86,21 @@ public class ApplicationController {
             }
         );
 
-        this.photoList.setCellFactory(listView -> new ListCell<Photo>() {
-            ImageView imageView = new ImageView();
+        this.photoList.setCellFactory(listView -> new ListCell<Photo>()
+        {
+            final ImageView imageView = new ImageView();
 
             @Override
-            public void updateItem(Photo photo, boolean empty) {
+            public void updateItem(Photo photo, boolean empty)
+            {
                 super.updateItem(photo, empty);
 
-                if (empty) {
+                if (empty)
+                {
                     setText(null);
                     setGraphic(null);
-                } else {
+                } else
+                {
                     Image image = new Image(photo.getPhotoFile().toURI().toString(),
                                             160, // width
                                             160, // height
@@ -232,7 +236,8 @@ public class ApplicationController {
         }
     }
 
-    public void handleRemoveTag(ActionEvent e) {
+    public void handleRemoveTag(ActionEvent e)
+    {
         Button pButton = (Button) e.getSource();
 
         if (pButton == remTagButton) {
@@ -329,10 +334,10 @@ public class ApplicationController {
             captionPrompt.setHeaderText("Enter a new caption for the photo");
             Optional<String> res = captionPrompt.showAndWait();
 
-            res.ifPresent( s -> {
+            res.ifPresent(s -> {
                 selectedPhoto.setCaption(s);
                 Album selectedAlbum = this.albumList.getSelectionModel().getSelectedItem();
-                this.updatePhotoList(selectedAlbum.getPhotos());
+                updatePhotoList(selectedAlbum.getPhotos());
             });
         }
     }

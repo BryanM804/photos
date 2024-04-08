@@ -44,6 +44,15 @@ public final class Album
         {
             throw new IllegalStateException();
         }
+
+        for (Photo photo : this.photos)
+        {
+            File newPhotoFile = new File(newAlbumFile, photo.getPhotoFile().getName());
+            photo.setPhotoFile(newPhotoFile);
+
+            File newDataFile = new File(newAlbumFile, photo.getDataFile().getName());
+            photo.setDataFile(newDataFile);
+        }
     }
 
     public void addPhoto(Photo photo)
