@@ -1,6 +1,12 @@
 package javafx.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import application.Application;
@@ -73,9 +79,36 @@ public class SearchDialogController {
 
             if (input.length() == 0) return;
 
-            // Send search query and get resulting photo list
+            List<Photo> matches = new ArrayList<>();
 
-            //updatePhotoList(newPhotos);
+            for (Album album : Application.getInstance().getAlbumManager().getLoadedAlbums())
+            {
+                middle:
+                for (Photo photo : album.getPhotos())
+                {
+                    if (photo.getCaption() == null)
+                    {
+                        continue;
+                    }
+
+                    if (photo.getCaption().toLowerCase().contains(input.toLowerCase()))
+                    {
+                        matches.add(photo);
+                        continue;
+                    }
+
+                    for (Map.Entry<String, String> tag : photo.getTags().entrySet())
+                    {
+                        if (tag.getValue().toLowerCase().contains(input.toLowerCase()))
+                        {
+                            matches.add(photo);
+                            continue middle;
+                        }
+                    }
+                }
+            }
+
+            updatePhotoList(matches);
         }
     }
 
@@ -89,14 +122,15 @@ public class SearchDialogController {
                 cAlbumPrompt.setHeaderText("Enter a name for the album:");
 
                 Optional<String> res = cAlbumPrompt.showAndWait();
-                res.ifPresent(s -> {
+                res.ifPresent(s ->
+                {
                     Album newAlbum = Application.getInstance().getAlbumManager().createAlbum(s);
                     this.createdNewAlbum = true;
 
                     List<Photo> albumContents = photoList.getItems();
-                    albumContents.forEach(p -> {
-                        newAlbum.addPhoto(p);
-                    });
+
+                    // copy photos over
+                    albumContents.forEach(photo -> newAlbum.addPhoto(photo, true));
                 });
             } else {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);

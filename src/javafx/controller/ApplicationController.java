@@ -124,7 +124,7 @@ public class ApplicationController {
     }
 
     public void updateTagList(Photo selectedPhoto) {
-        List<String> tagStrings = new ArrayList<String>();
+        List<String> tagStrings = new ArrayList<>();
         selectedPhoto.getTags().entrySet().forEach(entry -> {
             tagStrings.add(entry.getKey() + ": " + entry.getValue());
         });
@@ -282,12 +282,13 @@ public class ApplicationController {
             errorAlert.setHeaderText("Invalid album entry!");
             errorAlert.setTitle("Invalid album");
 
-            res.ifPresent(s -> {
+            res.ifPresent(s ->
+            {
                 Album enteredAlbum = Application.getInstance().getAlbumManager().getAlbumByName(s);
                 if (enteredAlbum == null) {
                     errorAlert.showAndWait();
                 } else {
-                    enteredAlbum.addPhoto(selectedPhoto);
+                    enteredAlbum.addPhoto(selectedPhoto, true);
                     updateAlbumList(Application.getInstance().getAlbumManager().getLoadedAlbums());
                 }
             });
@@ -316,7 +317,7 @@ public class ApplicationController {
                 if (enteredAlbum == null) {
                     errorAlert.showAndWait();
                 } else {
-                    enteredAlbum.movePhoto(enteredAlbum, selectedPhoto);
+                    selectedAlbum.movePhoto(enteredAlbum, selectedPhoto);
                     updatePhotoList(selectedAlbum.getPhotos());
                     updateAlbumList(Application.getInstance().getAlbumManager().getLoadedAlbums());
                 }

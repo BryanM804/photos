@@ -50,7 +50,7 @@ public final class AlbumManager
                 Photo photo = new Photo(photoFile);
                 photo.deserialize();
 
-                album.addPhoto(photo);
+                album.addPhoto(photo, false);
             }
 
             this.loadedAlbums.add(album);
@@ -73,6 +73,9 @@ public final class AlbumManager
 
     public void deleteAlbum(Album album)
     {
+        // Have to delete subfiles first
+        recursivelyDelete(album.getAlbumFile());
+
         try
         {
             Files.delete(album.getAlbumFile().toPath());
@@ -82,6 +85,27 @@ public final class AlbumManager
         }
 
         this.loadedAlbums.remove(album);
+    }
+
+    public void recursivelyDelete(File folder)
+    {
+        if (folder.listFiles() == null)
+        {
+            return;
+        }
+
+        for (File subFile : folder.listFiles())
+        {
+            if (subFile.isDirectory())
+            {
+                recursivelyDelete(subFile);
+            }
+
+            if (!subFile.delete())
+            {
+                throw new IllegalStateException();
+            }
+        }
     }
 
     public Album getAlbumByName(String name) {
