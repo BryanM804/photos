@@ -167,7 +167,17 @@ public class ApplicationController {
             cAlbumPrompt.setHeaderText("Enter a name for the album:");
 
             Optional<String> res = cAlbumPrompt.showAndWait();
-            res.ifPresent(s -> Application.getInstance().getAlbumManager().createAlbum(s));
+            res.ifPresent(s -> {
+                if (Application.getInstance().getAlbumManager().getAlbumByName(s) != null) {
+                    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                    errorAlert.setTitle("Album name taken");
+                    errorAlert.setHeaderText("Album name already in use!");
+                    errorAlert.initOwner(pButton.getScene().getWindow());
+                    errorAlert.showAndWait();
+                } else {
+                    Application.getInstance().getAlbumManager().createAlbum(s);
+                }
+            });
         }
 
         updateAlbumList(Application.getInstance().getAlbumManager().getLoadedAlbums());
