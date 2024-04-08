@@ -45,5 +45,15 @@ public final class Launcher extends javafx.application.Application
     {
         Application application = new Application(session);
         application.openGUI(mainStage);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() ->
+        {
+            Application runningApplication = Application.getInstance();
+
+            if (runningApplication != null)
+            {
+                runningApplication.getAlbumManager().save();
+            }
+        }));
     }
 }

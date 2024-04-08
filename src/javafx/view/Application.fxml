@@ -19,7 +19,7 @@
             <Insets />
          </opaqueInsets>
          <children>
-            <ToolBar orientation="VERTICAL" prefHeight="225.0" prefWidth="210.0">
+            <ToolBar orientation="VERTICAL" prefHeight="275.0" prefWidth="210.0">
               <items>
                 <Button fx:id="addPhotoButton" mnemonicParsing="false" onAction="#handleAddPhoto" prefWidth="200.0" text="Add Photo" />
                   <Button fx:id="copyPhotoButton" mnemonicParsing="false" onAction="#handleCopyPhoto" prefWidth="200.0" text="Copy Photo" visible="false" />
@@ -35,7 +35,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <ListView fx:id="tagList" prefHeight="400.0" prefWidth="200.0" visible="false" />
+            <ListView fx:id="tagList" prefHeight="350.0" prefWidth="200.0" visible="false" />
          </children>
       </VBox>
    </right>

@@ -1,7 +1,6 @@
 package application.album;
 
 import application.Application;
-import javafx.controller.ApplicationController;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,8 +48,7 @@ public final class AlbumManager
                 }
 
                 Photo photo = new Photo(photoFile);
-
-                System.out.println(photo.getTimestamp());
+                photo.deserialize();
 
                 album.addPhoto(photo);
             }
@@ -98,5 +96,16 @@ public final class AlbumManager
     public List<Album> getLoadedAlbums()
     {
         return this.loadedAlbums;
+    }
+
+    public void save()
+    {
+        for (Album album : this.loadedAlbums)
+        {
+            for (Photo photo : album.getPhotos())
+            {
+                photo.serialize();
+            }
+        }
     }
 }
