@@ -118,10 +118,12 @@ public final class Album
     @Override
     public String toString()
     {
-        if (this.getNumPhotos() == 0) {
-            return this.name + "\n\tPhotos: " + this.getNumPhotos();
-        } else {
-            return this.name + "\n\tPhotos: " + this.getNumPhotos() + "\n\tFrom: " + this.getDateRanges()[0] + "\n\tTo: " + this.getDateRanges()[1];
+        if (this.getNumPhotos() == 0)
+        {
+            return this.name + "\n\tPhotos: 0";
+        } else
+        {
+            return this.name + "\n\tPhotos: " + this.getNumPhotos() + "\n\tFrom: " + getDateRanges()[0] + "\n\tTo: " + getDateRanges()[1];
         }
     }
 }
