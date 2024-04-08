@@ -3,6 +3,7 @@ package application.album;
 import application.Application;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import java.util.List;
 public final class Album
 {
     private String name;
-    private final File albumFile;
+    private File albumFile;
     private final List<Photo> photos = new ArrayList<>();
 
     public Album(String name)
@@ -45,23 +46,54 @@ public final class Album
             throw new IllegalStateException();
         }
 
+        this.albumFile = newAlbumFile;
+
         for (Photo photo : this.photos)
         {
-            File newPhotoFile = new File(newAlbumFile, photo.getPhotoFile().getName());
+            File newPhotoFile = new File(this.albumFile, photo.getPhotoFile().getName());
             photo.setPhotoFile(newPhotoFile);
 
-            File newDataFile = new File(newAlbumFile, photo.getDataFile().getName());
+            File newDataFile = new File(this.albumFile, photo.getDataFile().getName());
             photo.setDataFile(newDataFile);
         }
     }
 
-    public void addPhoto(Photo photo)
+    public void addPhoto(Photo photo,
+                         boolean copy)
     {
-        this.photos.add(photo);
+        if (copy)
+        {
+            try
+            {
+                File newPhotoFile = new File(this.albumFile, photo.getPhotoFile().getName());
+                FileOutputStream fos = new FileOutputStream(newPhotoFile);
+                Files.copy(photo.getPhotoFile().toPath(), fos);
+
+                Photo newPhoto = new Photo(newPhotoFile);
+                newPhoto.setCaption(photo.getCaption());
+                newPhoto.getTags().putAll(photo.getTags());
+
+                this.photos.add(newPhoto)
+;            } catch (IOException ioException)
+            {
+                throw new RuntimeException(ioException);
+            }
+        } else
+        {
+            this.photos.add(photo);
+        }
     }
 
     public void removePhoto(Photo photo)
     {
+        try
+        {
+            Files.delete(photo.getPhotoFile().toPath());
+        } catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+
         this.photos.remove(photo);
     }
 
@@ -80,7 +112,7 @@ public final class Album
         }
 
         removePhoto(photo);
-        dst.addPhoto(photo);
+        dst.addPhoto(photo, false);
     }
 
     public int getNumPhotos()

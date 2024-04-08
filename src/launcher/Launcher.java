@@ -48,7 +48,14 @@ public final class Launcher extends javafx.application.Application
 
         Runtime.getRuntime().addShutdownHook(new Thread(() ->
         {
-            Application runningApplication = Application.getInstance();
+            Application runningApplication;
+            try
+            {
+                runningApplication = Application.getInstance();
+            } catch (IllegalStateException e)
+            {
+                return; // User closed in login screen
+            }
 
             if (runningApplication != null)
             {

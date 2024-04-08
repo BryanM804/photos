@@ -28,12 +28,8 @@ public final class Photo implements Serializable
 
     public void serialize()
     {
-        try
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(this.dataFile)))
         {
-            ObjectOutputStream oos = new ObjectOutputStream(
-                    new FileOutputStream(this.dataFile)
-            );
-
             oos.writeObject(this);
         } catch (IOException e)
         {
@@ -43,19 +39,21 @@ public final class Photo implements Serializable
 
     public void deserialize()
     {
-        try
+        if (!this.dataFile.exists())
         {
-            ObjectInputStream ois = new ObjectInputStream(
-                    new FileInputStream(this.dataFile)
-            );
+            System.out.printf("Warning: Cannot find data file for photo %s\n", this.photoFile.getName());
+            return;
+        }
 
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(this.dataFile)))
+        {
             Photo $this = (Photo) ois.readObject();
 
             this.tags.putAll($this.tags);
             this.caption = $this.caption;
         } catch (IOException | ClassNotFoundException e)
         {
-            System.out.printf("Warning: No data found for photo %s.\n", this.photoFile.getName());
+            throw new RuntimeException(e);
         }
     }
 
