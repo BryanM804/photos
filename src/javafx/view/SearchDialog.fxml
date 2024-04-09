@@ -23,11 +23,11 @@
                   <ButtonBar layoutX="14.0" layoutY="6.0" prefHeight="40.0" prefWidth="200.0">
                     <buttons>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Search by:" />
-                        <Button fx:id="dateToggle" mnemonicParsing="false" text="Date" />
-                        <Button fx:id="tagToggle" mnemonicParsing="false" text="Tag" />
+                        <Button fx:id="dateToggle" mnemonicParsing="false" onAction="#handleDateClick" text="Date" />
+                        <Button fx:id="tagToggle" mnemonicParsing="false" onAction="#handleTagClick" text="Tag" />
                     </buttons>
                   </ButtonBar>
-                  <ButtonBar fx:id="dateSearchBar" layoutX="809.0" layoutY="6.0" prefHeight="40.0" prefWidth="361.0" visible="false">
+                  <ButtonBar fx:id="dateBar" layoutX="809.0" layoutY="6.0" prefHeight="40.0" prefWidth="361.0" visible="false">
                     <buttons>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="From" />
                         <TextField fx:id="fromDate" prefHeight="25.0" prefWidth="200.0" />
@@ -52,8 +52,8 @@
                         <TextField fx:id="tag2val" layoutX="30.0" layoutY="18.0" prefHeight="25.0" prefWidth="200.0" />
                      </buttons>
                   </ButtonBar>
-                  <RadioButton fx:id="orRadio" layoutX="946.0" layoutY="88.0" mnemonicParsing="false" text="OR" />
-                  <RadioButton fx:id="andRadio" layoutX="859.0" layoutY="88.0" mnemonicParsing="false" text="AND" />
+                  <RadioButton fx:id="orRadio" layoutX="946.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleAndOrToggle" text="OR" />
+                  <RadioButton fx:id="andRadio" layoutX="859.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleAndOrToggle" text="AND" />
                </children>
             </AnchorPane>
             <ButtonBar prefHeight="40.0" prefWidth="200.0" />

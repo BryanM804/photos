@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -30,13 +31,20 @@ import javafx.scene.image.ImageView;
 public class SearchDialogController {
 
     private boolean createdNewAlbum;
+    private boolean dateMode; // false for tag mode
+    private boolean conjunction; // false for disjunction
 
     @FXML Button searchSubmitButton;
     @FXML Button createAlbumButton;
+    @FXML ButtonBar dateBar;
+    @FXML ButtonBar tag1Bar;
+    @FXML ButtonBar tag2Bar;
     @FXML TextField tag1tag;
     @FXML TextField tag2tag;
     @FXML TextField tag1val;
     @FXML TextField tag2val;
+    @FXML TextField fromDate;
+    @FXML TextField toDate;
     @FXML RadioButton andRadio;
     @FXML RadioButton orRadio;
     @FXML Button dateButton;
@@ -49,6 +57,8 @@ public class SearchDialogController {
     @FXML
     public void initialize() {
         createdNewAlbum = false;
+        dateMode = false;
+        conjunction = false;
 
         this.photoList.setCellFactory(listView -> new ListCell<Photo>() {
             ImageView imageView = new ImageView();
@@ -94,9 +104,10 @@ public class SearchDialogController {
         Button pButton = (Button) e.getSource();
 
         if (pButton == searchSubmitButton) {
-            String input = searchInput.getText();
-
-            if (input.length() == 0) return;
+            String[] tag1 = {tag1tag.getText(), tag1val.getText()};
+            String[] tag2 = {tag2tag.getText(), tag2tag.getText()};
+            String fromDateString = fromDate.getText();
+            String toDateString = toDate.getText();
 
             List<Photo> matches = new ArrayList<>();
 
@@ -161,6 +172,38 @@ public class SearchDialogController {
                 errorAlert.setHeaderText("No photos to create an album with!");
                 errorAlert.showAndWait();
             }
+        }
+    }
+
+    public void handleDateClick(ActionEvent e) {
+        dateBar.setVisible(true);
+        tag1Bar.setVisible(false);
+        tag2Bar.setVisible(false);
+        andRadio.setVisible(false);
+        orRadio.setVisible(false);
+        dateMode = true;
+
+    }
+
+    public void handleTagClick(ActionEvent e) {
+        tag1Bar.setVisible(true);
+        tag2Bar.setVisible(true);
+        andRadio.setVisible(true);
+        orRadio.setVisible(true);
+        dateBar.setVisible(false);
+        dateMode = false;
+
+    }
+
+    public void handleAndOrToggle(ActionEvent e) {
+        RadioButton pButton = (RadioButton) e.getSource();
+
+        if (pButton == andRadio) {
+            orRadio.setSelected(false);
+            conjunction = true;
+        } else if (pButton == orRadio) {
+            andRadio.setSelected(false);
+            conjunction = false;
         }
     }
 
