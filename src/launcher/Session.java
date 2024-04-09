@@ -14,6 +14,8 @@ public final class Session implements Serializable
     private final File userDataFile;
     private final boolean userExists;
 
+    private boolean isFirstTime;
+
     private final boolean admin;
 
     private final List<String> tags = new ArrayList<>();
@@ -121,5 +123,15 @@ public final class Session implements Serializable
         {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean isFirstTime()
+    {
+        return this.isFirstTime;
+    }
+
+    public void setFirstTime(boolean firstTime)
+    {
+        this.isFirstTime = firstTime;
     }
 }
