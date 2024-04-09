@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.File;
+
 public final class Launcher extends javafx.application.Application
 {
     private static Stage mainStage;
@@ -57,6 +59,9 @@ public final class Launcher extends javafx.application.Application
             if (runningApplication != null)
             {
                 runningApplication.getAlbumManager().save();
+
+                File userDataFile = runningApplication.getSession().getUserDataFile();
+                runningApplication.getSession().serialize(userDataFile);
             }
         }));
     }
