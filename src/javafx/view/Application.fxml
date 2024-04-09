@@ -28,6 +28,7 @@
                   <Button fx:id="changeCapButton" mnemonicParsing="false" onAction="#handleChangeCaption" prefWidth="200.0" text="Change Caption" visible="false" />
                   <Button fx:id="addTagButton" mnemonicParsing="false" onAction="#handleAddTag" prefWidth="200.0" text="Add Tag" visible="false" />
                   <Button fx:id="remTagButton" mnemonicParsing="false" onAction="#handleRemoveTag" prefWidth="200.0" text="Remove Selected Tag" visible="false" />
+                  <Button fx:id="inspectImageButton" mnemonicParsing="false" onAction="#handleInspectImageClick" prefWidth="200.0" text="Inspect Image" visible="false" />
               </items>
             </ToolBar>
             <Label fx:id="tagLabel" text="Tags" visible="false">
@@ -47,7 +48,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <ListView fx:id="albumList" editable="true" prefHeight="580.0" prefWidth="200.0" />
+            <ListView fx:id="albumList" editable="true" prefHeight="610.0" prefWidth="200.0" />
          </children>
       </VBox>
    </left>
@@ -55,6 +56,7 @@
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <items>
             <Button fx:id="searchButton" mnemonicParsing="false" onAction="#handleSearchClick" prefWidth="200.0" text="Search for Photos" />
+            <Button fx:id="slideShowButton" mnemonicParsing="false" onAction="#handleSlideShowClick" prefWidth="200.0" text="Slideshow" visible="false" />
          </items>
       </ToolBar>
    </top>

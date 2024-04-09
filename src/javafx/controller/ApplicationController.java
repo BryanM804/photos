@@ -11,14 +11,15 @@ import application.album.AlbumManager;
 import application.album.Photo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.dialogs.InspectImageDialog;
 import javafx.dialogs.SearchDialog;
+import javafx.dialogs.SlideShowDialog;
 import javafx.dialogs.TagDialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
@@ -37,6 +38,8 @@ public class ApplicationController {
     @FXML Button copyPhotoButton;
     @FXML Button movePhotoButton;
     @FXML Button searchButton;
+    @FXML Button inspectImageButton;
+    @FXML Button slideShowButton;
     @FXML Button changeCapButton;
     @FXML ListView<Album> albumList;
     @FXML ListView<String> tagList;
@@ -67,6 +70,7 @@ public class ApplicationController {
                     albumRNButton.setVisible(newValue != null);
                     albumDelButton.setVisible(newValue != null);
                     addPhotoButton.setVisible(newValue != null);
+                    slideShowButton.setVisible(newValue != null);
                     photoBar.setVisible(newValue != null);
                     if (newValue != null) {
                         updatePhotoList(albumList.getSelectionModel().getSelectedItem().getPhotos());
@@ -80,6 +84,7 @@ public class ApplicationController {
                 remPhotoButton.setVisible(newValue != null);
                 copyPhotoButton.setVisible(newValue != null);
                 movePhotoButton.setVisible(newValue != null);
+                inspectImageButton.setVisible(newValue != null);
                 tagList.setVisible(newValue != null);
                 tagLabel.setVisible(newValue != null);
                 changeCapButton.setVisible(newValue != null);
@@ -108,10 +113,10 @@ public class ApplicationController {
                 } else
                 {
                     Image image = new Image(photo.getPhotoFile().toURI().toString(),
-                                            160, // width
-                                            160, // height
-                                            true, // preserve ratio
-                                            true); // smooth rescaling
+                            160, // width
+                            160, // height
+                            true, // preserve ratio
+                            true); // smooth rescaling
                     setPrefWidth(300);
                     setMaxWidth(300);
                     setWrapText(true);
@@ -353,6 +358,26 @@ public class ApplicationController {
                 Album selectedAlbum = this.albumList.getSelectionModel().getSelectedItem();
                 updatePhotoList(selectedAlbum.getPhotos());
             });
+        }
+    }
+
+    public void handleSlideShowClick(ActionEvent e) {
+        Button pButton = (Button) e.getSource();
+
+        if (pButton == slideShowButton) {
+            Album selectedAlbum = albumList.getSelectionModel().getSelectedItem();
+            SlideShowDialog slideDialog = new SlideShowDialog(pButton.getScene().getWindow(), selectedAlbum.getPhotos());
+            slideDialog.showAndWait();
+        }
+    }
+
+    public void handleInspectImageClick(ActionEvent e) {
+        Button pButton = (Button) e.getSource();
+
+        if (pButton == inspectImageButton) {
+            Photo selectedPhoto = photoList.getSelectionModel().getSelectedItem();
+            InspectImageDialog imageDialog = new InspectImageDialog(pButton.getScene().getWindow(), selectedPhoto);
+            imageDialog.showAndWait();
         }
     }
 
