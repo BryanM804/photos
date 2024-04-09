@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class AlbumManager
 {
@@ -18,6 +20,8 @@ public final class AlbumManager
     public void cacheAllAlbums()
     {
         File[] albums = Application.getInstance().getSession().getUserFile().listFiles();
+
+        Map<File, Photo> filePhotoMap = new HashMap<>(); // hacky fix
 
         if (albums == null)
         {
@@ -40,17 +44,23 @@ public final class AlbumManager
 
             Album album = new Album(albumFile.getName());
 
-            for (File photoFile : photos)
+            for (File dataFile : photos)
             {
-                if (!Photo.isPhoto(photoFile))
+                if (!dataFile.getName().endsWith(".dat"))
                 {
                     continue;
                 }
 
-                Photo photo = new Photo(photoFile);
-                photo.deserialize();
+                Photo photo = Photo.deserialize(dataFile);
 
-                album.addPhoto(photo, false);
+                if (filePhotoMap.containsKey(photo.getPhotoFile()))
+                {
+                    album.addPhoto(filePhotoMap.get(photo.getPhotoFile()));
+                } else
+                {
+                    filePhotoMap.put(photo.getPhotoFile(), photo);
+                    album.addPhoto(photo);
+                }
             }
 
             this.loadedAlbums.add(album);
@@ -101,9 +111,12 @@ public final class AlbumManager
                 recursivelyDelete(subFile);
             }
 
-            if (!subFile.delete())
+            if (subFile.getName().endsWith(".dat"))
             {
-                throw new IllegalStateException();
+                if (!subFile.delete())
+                {
+                    throw new IllegalStateException();
+                }
             }
         }
     }
@@ -128,7 +141,8 @@ public final class AlbumManager
         {
             for (Photo photo : album.getPhotos())
             {
-                photo.serialize();
+                File dataFile = new File(album.getAlbumFile(), photo.getDataFile().getName());
+                photo.serialize(dataFile);
             }
         }
     }

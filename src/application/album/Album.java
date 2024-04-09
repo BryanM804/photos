@@ -3,7 +3,6 @@ package application.album;
 import application.Application;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
@@ -58,37 +57,19 @@ public final class Album
         }
     }
 
-    public void addPhoto(Photo photo,
-                         boolean copy)
+    public void addPhoto(Photo photo)
     {
-        if (copy)
-        {
-            try
-            {
-                File newPhotoFile = new File(this.albumFile, photo.getPhotoFile().getName());
-                FileOutputStream fos = new FileOutputStream(newPhotoFile);
-                Files.copy(photo.getPhotoFile().toPath(), fos);
-
-                Photo newPhoto = new Photo(newPhotoFile);
-                newPhoto.setCaption(photo.getCaption());
-                newPhoto.getTags().putAll(photo.getTags());
-
-                this.photos.add(newPhoto)
-;            } catch (IOException ioException)
-            {
-                throw new RuntimeException(ioException);
-            }
-        } else
-        {
-            this.photos.add(photo);
-        }
+        this.photos.add(photo);
     }
 
     public void removePhoto(Photo photo)
     {
         try
         {
-            Files.delete(photo.getPhotoFile().toPath());
+            if (photo.getDataFile().exists())
+            {
+                Files.delete(photo.getDataFile().toPath());
+            }
         } catch (IOException e)
         {
             throw new RuntimeException(e);
@@ -100,19 +81,10 @@ public final class Album
     public void movePhoto(Album dst,
                           Photo photo)
     {
-        File photoFile = photo.getPhotoFile();
-        File dstFile = dst.getAlbumFile();
-
-        try
-        {
-            Files.move(photoFile.toPath(), dstFile.toPath());
-        } catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
         removePhoto(photo);
-        dst.addPhoto(photo, false);
+        dst.addPhoto(photo);
+
+        photo.setDataFile(new File(dst.getAlbumFile(), photo.getDataFile().getName()));
     }
 
     public int getNumPhotos()

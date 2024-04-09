@@ -145,7 +145,7 @@ public class SearchDialogController {
                     List<Photo> albumContents = photoList.getItems();
 
                     // copy photos over
-                    albumContents.forEach(photo -> newAlbum.addPhoto(photo, true));
+                    albumContents.forEach(newAlbum::addPhoto);
                 });
             } else {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);

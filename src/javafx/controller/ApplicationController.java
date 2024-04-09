@@ -314,7 +314,7 @@ public class ApplicationController {
 
             if (photoFile != null) {
                 Album selectedAlbum = albumList.getSelectionModel().getSelectedItem();
-                selectedAlbum.addPhoto(new Photo(photoFile), false);
+                selectedAlbum.addPhoto(new Photo(photoFile, selectedAlbum.getAlbumFile()));
                 updateAlbumList(Application.getInstance().getAlbumManager().getLoadedAlbums());
                 updatePhotoList(selectedAlbum.getPhotos());
             }
@@ -364,7 +364,7 @@ public class ApplicationController {
                 if (enteredAlbum == null) {
                     errorAlert.showAndWait();
                 } else {
-                    enteredAlbum.addPhoto(selectedPhoto, true);
+                    enteredAlbum.addPhoto(selectedPhoto);
                     updateAlbumList(Application.getInstance().getAlbumManager().getLoadedAlbums());
                 }
             });
