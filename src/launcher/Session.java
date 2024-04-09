@@ -52,6 +52,14 @@ public final class Session implements Serializable
         return this.userDataFile;
     }
 
+    public List<String> getTags() {
+        return this.tags;
+    }
+
+    public void addTag(String newTag) {
+        this.tags.add(newTag);
+    }
+
     public boolean isValidUser() {
         return userExists;
     }

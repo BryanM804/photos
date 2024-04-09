@@ -80,6 +80,14 @@ public final class Photo implements Serializable
         return this.tags;
     }
 
+    public void addTag(String[] tag) {
+        this.tags.put(tag[0], tag[1]);
+    }
+
+    public void removeTag(String[] tag) {
+        this.tags.remove(tag[0], tag[1]);
+    }
+
     public String getCaption()
     {
         return this.caption;

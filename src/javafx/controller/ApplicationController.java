@@ -282,9 +282,10 @@ public class ApplicationController {
             
             TagDialog tDialog = new TagDialog(pButton.getScene().getWindow());
             Optional<String[]> res = tDialog.showAndWait();
-            res.ifPresent(s -> System.out.println(s)); 
-            // If the tag type exists it will do nothing if not it adds
-            // to the list of tag types
+            res.ifPresent(s -> {
+                selectedPhoto.addTag(s);
+                this.updateTagList(selectedPhoto);
+            }); 
         }
     }
 
@@ -297,7 +298,14 @@ public class ApplicationController {
         Button pButton = (Button) e.getSource();
 
         if (pButton == remTagButton) {
-            
+            String selectedTag = tagList.getSelectionModel().getSelectedItem();
+            Photo selectedPhoto = photoList.getSelectionModel().getSelectedItem();
+
+            String[] tagData = selectedTag.split(":");
+
+            selectedPhoto.removeTag(new String[] {tagData[0], tagData[1].substring(1)});
+
+            this.updateTagList(selectedPhoto);
         }
     }
 
