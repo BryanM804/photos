@@ -104,10 +104,9 @@ public class SearchDialogController {
         Button pButton = (Button) e.getSource();
 
         if (pButton == searchSubmitButton) {
-            String[] tag1 = {tag1tag.getText(), tag1val.getText()};
-            String[] tag2 = {tag2tag.getText(), tag2tag.getText()};
-            String fromDateString = fromDate.getText();
-            String toDateString = toDate.getText();
+            String input = searchSubmitButton.getText();
+
+            if (input.length() == 0) return;
 
             List<Photo> matches = new ArrayList<>();
 
