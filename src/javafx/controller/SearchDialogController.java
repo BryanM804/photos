@@ -17,7 +17,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
@@ -33,14 +32,7 @@ public class SearchDialogController {
 
     @FXML Button searchSubmitButton;
     @FXML Button createAlbumButton;
-    @FXML TextField tag1tag;
-    @FXML TextField tag2tag;
-    @FXML TextField tag1val;
-    @FXML TextField tag2val;
-    @FXML RadioButton andRadio;
-    @FXML RadioButton orRadio;
-    @FXML Button dateButton;
-    @FXML Button tagButton;
+    @FXML TextField searchInput;
     @FXML ListView<Photo> photoList;
 
     /**

@@ -12,7 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 
 /**
  * @author Bryan Mulholland
@@ -28,7 +27,7 @@ public class TagDialogController
     @FXML
     public void initialize()
     {
-        updateTagList(Application.getInstance().getSession().getTags());
+        updateTagList(Application.getInstance().getSession().getCustomTags());
     }
 
     /**
@@ -57,16 +56,15 @@ public class TagDialogController
             addTagButton.setVisible(false);
             tagValueInput.setVisible(true);
 
-            if (customTagInput.getText().length() < 1) {
-                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setTitle("No text");
-                errorAlert.setHeaderText("Please enter a tag name!");
-                errorAlert.initOwner(pButton.getScene().getWindow());
-                errorAlert.showAndWait();
-            } else {
-                Application.getInstance().getSession().addTag(customTagInput.getText());
-                updateTagList(Application.getInstance().getSession().getTags());
+            String text = this.customTagInput.getText();
+
+            if (text.isEmpty())
+            {
+                return;
             }
+
+            Application.getInstance().getSession().getCustomTags().add(text);
+            updateTagList(Application.getInstance().getSession().getCustomTags());
         }
     }
 
