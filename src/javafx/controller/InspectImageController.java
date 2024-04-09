@@ -34,7 +34,7 @@ public class InspectImageController {
         StringBuilder info = new StringBuilder();
         info.append("Caption: \"" + photo.getCaption() + "\"\n");
         info.append("Date: " + photo.getTimestamp().toString() + "\n");
-        info.append("Tags: ");
+        info.append("Tags: " + photo.getTags().toString());
 
         String infoString = info.toString();
 
