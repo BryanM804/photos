@@ -54,14 +54,6 @@ public final class Session implements Serializable
         return this.userDataFile;
     }
 
-    public List<String> getTags() {
-        return this.tags;
-    }
-
-    public void addTag(String newTag) {
-        this.tags.add(newTag);
-    }
-
     public boolean isValidUser() {
         return userExists;
     }
@@ -133,5 +125,10 @@ public final class Session implements Serializable
     public void setFirstTime(boolean firstTime)
     {
         this.isFirstTime = firstTime;
+    }
+
+    public List<String> getCustomTags()
+    {
+        return this.tags;
     }
 }

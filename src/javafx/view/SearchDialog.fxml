@@ -5,11 +5,9 @@
 <?import javafx.scene.control.ButtonType?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
 
 <DialogPane headerText="Search for photos in your albums" maxHeight="600.0" minHeight="600.0" prefHeight="600.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx.controller.SearchDialogController">
    <buttonTypes>
@@ -67,3 +65,4 @@
       </VBox>
    </header>
 </DialogPane>
+

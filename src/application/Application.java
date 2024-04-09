@@ -28,7 +28,6 @@ public final class Application
         if (session.isFirstTime())
         {
             this.albumManager.cacheStockPhotos();
-            System.out.println("FIRST TIME!");
         } else
         {
             this.albumManager.cacheAllAlbums();

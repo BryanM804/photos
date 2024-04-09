@@ -98,6 +98,11 @@ public class ApplicationController {
                 tagList.setVisible(newValue != null);
                 tagLabel.setVisible(newValue != null);
                 changeCapButton.setVisible(newValue != null);
+
+                if (newValue != null)
+                {
+                    updateTagList(newValue);
+                }
             }
         );
 
@@ -277,15 +282,16 @@ public class ApplicationController {
     public void handleAddTag(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
-        if (pButton == addTagButton) {
+        if (pButton == addTagButton)
+        {
             Photo selectedPhoto = photoList.getSelectionModel().getSelectedItem();
             
             TagDialog tDialog = new TagDialog(pButton.getScene().getWindow());
             Optional<String[]> res = tDialog.showAndWait();
-            res.ifPresent(s -> {
-                selectedPhoto.addTag(s);
-                this.updateTagList(selectedPhoto);
-            }); 
+
+            res.ifPresent(s -> selectedPhoto.getTags().put(s[0], s[1]));
+
+            updateTagList(selectedPhoto);
         }
     }
 
@@ -297,15 +303,13 @@ public class ApplicationController {
     {
         Button pButton = (Button) e.getSource();
 
-        if (pButton == remTagButton) {
-            String selectedTag = tagList.getSelectionModel().getSelectedItem();
+        if (pButton == remTagButton)
+        {
             Photo selectedPhoto = photoList.getSelectionModel().getSelectedItem();
+            String selectedTag = tagList.getSelectionModel().getSelectedItem();
 
-            String[] tagData = selectedTag.split(":");
-
-            selectedPhoto.removeTag(new String[] {tagData[0], tagData[1].substring(1)});
-
-            this.updateTagList(selectedPhoto);
+            selectedPhoto.getTags().remove(selectedTag.split(":")[0]);
+            updateTagList(selectedPhoto);
         }
     }
 
