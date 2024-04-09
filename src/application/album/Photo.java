@@ -1,6 +1,7 @@
 package application.album;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -88,5 +89,34 @@ public final class Photo implements Serializable
     public void setCaption(String caption)
     {
         this.caption = caption;
+    }
+
+    public static boolean isPhoto(File file)
+    {
+        if (file.isDirectory())
+        {
+            return false;
+        }
+
+        try
+        {
+            String contentType = Files.probeContentType(file.toPath());
+
+            if (contentType == null)
+            {
+                return false;
+            }
+
+            String rawType = contentType.split("/")[0];
+            if (!rawType.equals("image"))
+            {
+                return false;
+            }
+        } catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+        return true;
     }
 }

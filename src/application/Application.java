@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 import launcher.Launcher;
 import launcher.Session;
 
+import java.io.File;
+
 public final class Application
 {
     private static Application instance;
@@ -22,7 +24,15 @@ public final class Application
         this.session = session;
 
         this.albumManager = new AlbumManager();
-        this.albumManager.cacheAllAlbums();
+
+        if (session.isFirstTime())
+        {
+            this.albumManager.cacheStockPhotos();
+            System.out.println("FIRST TIME!");
+        } else
+        {
+            this.albumManager.cacheAllAlbums();
+        }
     }
 
     /**
@@ -95,6 +105,9 @@ public final class Application
     public void logout()
     {
         this.albumManager.save();
+        File userDataFile = session.getUserDataFile();
+        session.setFirstTime(false);
+        session.serialize(userDataFile);
 
         instance = null;
         session = null;

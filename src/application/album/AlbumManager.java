@@ -14,6 +14,56 @@ public final class AlbumManager
 {
     private final List<Album> loadedAlbums = new ArrayList<>();
 
+    public void cacheStockPhotos() // mind boggling hack fix
+    {
+        File[] albums = Application.getInstance().getSession().getUserFile().listFiles();
+
+        Map<File, Photo> filePhotoMap = new HashMap<>();
+
+        if (albums == null)
+        {
+            throw new IllegalStateException();
+        }
+
+        for (File albumFile : albums)
+        {
+            if (!albumFile.isDirectory())
+            {
+                continue;
+            }
+
+            File[] photos = albumFile.listFiles();
+
+            if (photos == null)
+            {
+                continue;
+            }
+
+            Album album = new Album(albumFile.getName());
+
+            for (File photoFile : photos)
+            {
+                if (!Photo.isPhoto(photoFile))
+                {
+                    continue;
+                }
+
+                Photo photo = new Photo(photoFile, albumFile);
+
+                if (filePhotoMap.containsKey(photo.getPhotoFile()))
+                {
+                    album.addPhoto(filePhotoMap.get(photo.getPhotoFile()));
+                } else
+                {
+                    filePhotoMap.put(photo.getPhotoFile(), photo);
+                    album.addPhoto(photo);
+                }
+            }
+
+            this.loadedAlbums.add(album);
+        }
+    }
+
     /**
      * Loads all photos from each album and creates their Java representative object
      */

@@ -47,6 +47,9 @@ public class LoginController
             if (userDataFile.exists())
             {
                 session = Session.deserialize(userDataFile);
+            } else if (username.equalsIgnoreCase("stock")) // unbelievable hack
+            {
+                session.setFirstTime(true);
             }
 
             Launcher.launch(session);

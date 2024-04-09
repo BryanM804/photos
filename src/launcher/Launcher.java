@@ -61,6 +61,7 @@ public final class Launcher extends javafx.application.Application
                 runningApplication.getAlbumManager().save();
 
                 File userDataFile = runningApplication.getSession().getUserDataFile();
+                runningApplication.getSession().setFirstTime(false);
                 runningApplication.getSession().serialize(userDataFile);
             }
         }));
