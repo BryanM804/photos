@@ -1,9 +1,5 @@
 package javafx.controller;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +22,10 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * @author Bryan Mulholland
+ * @author Andrew Bonasera
+ */
 public class SearchDialogController {
 
     private boolean createdNewAlbum;
@@ -35,6 +35,9 @@ public class SearchDialogController {
     @FXML TextField searchInput;
     @FXML ListView<Photo> photoList;
 
+    /**
+     * Sets the cell factory for the ListView of images
+     */
     @FXML
     public void initialize() {
         createdNewAlbum = false;
@@ -66,11 +69,19 @@ public class SearchDialogController {
         });
     }
 
+    /**
+     * Updates the ListView of photos with the given photos
+     * @param newPhotos
+     */
     public void updatePhotoList(List<Photo> newPhotos) {
         ObservableList<Photo>  displayPhotos = FXCollections.observableArrayList(newPhotos);
         this.photoList.setItems(displayPhotos);
     }
 
+    /**
+     * Searches for photos that meet the search input
+     * @param e
+     */
     public void handleSearchClick(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -112,6 +123,10 @@ public class SearchDialogController {
         }
     }
 
+    /**
+     * Creates an album from the current photos in the photo list
+     * @param e
+     */
     public void handleCreateAlbum(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -141,6 +156,10 @@ public class SearchDialogController {
         }
     }
 
+    /**
+     * @param buttonType
+     * @return true if a new album was created
+     */
     public boolean convertResult(ButtonType buttonType) {
         return createdNewAlbum;
     }

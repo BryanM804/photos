@@ -13,6 +13,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+/**
+ * @author Bryan Mulholland
+ */
 public class AdminController {
     
     @FXML Button logoutButton;
@@ -26,11 +29,19 @@ public class AdminController {
         updateUserList(Application.getInstance().getSession().getAllUsernames());
     }
 
+    /**
+     * Updates the ListView of users
+     * @param users
+     */
     public void updateUserList(List<String> users) {
         ObservableList<String> usernames = FXCollections.observableArrayList(users);
         userList.setItems(usernames);
     }
 
+    /**
+     * Tells the application to log the user out
+     * @param e event
+     */
     public void handleLogout(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -39,6 +50,10 @@ public class AdminController {
         }
     }
 
+    /**
+     * Creates a user if the username is valid
+     * @param e event
+     */
     public void handleCreateUser(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -59,10 +74,15 @@ public class AdminController {
                 return;
             }
 
-            //create user username
+            Application.getInstance().getSession().createUserFile(username);
+            updateUserList(Application.getInstance().getSession().getAllUsernames());
         }
     }
 
+    /**
+     * Deletes the selected user if there is one
+     * @param e event
+     */
     public void handleDeleteUser(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -78,10 +98,16 @@ public class AdminController {
                 return;
             }
 
-            // delete user selectedUsername
+            Application.getInstance().getSession().deleteUserFile(selectedUsername);
+            updateUserList(Application.getInstance().getSession().getAllUsernames());
         }
     }
 
+    /**
+     * Checks if the string contains only alphanumeric characters
+     * @param str
+     * @return true if str contains no special characters
+     */
     public boolean isAlphaNumeric(String str)
     {
         return Pattern.matches("^[a-zA-Z0-9]+$", str);

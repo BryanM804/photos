@@ -12,6 +12,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+/**
+ * @author Bryan Mulholland
+ */
 public class TagDialogController {
     @FXML TextField customTagInput;
     @FXML TextField tagValueInput;
@@ -21,9 +24,13 @@ public class TagDialogController {
 
     @FXML
     public void initialize() {
-        
+
     }
 
+    /**
+     * Shows the create your own tag inputs
+     * @param e
+     */
     public void handleCYOClick(ActionEvent e) {
         Button pButton = (Button)e.getSource();
 
@@ -34,6 +41,10 @@ public class TagDialogController {
         }
     }
 
+    /**
+     * Adds the users tag to the list of tags
+     * @param e
+     */
     public void handleAddClick(ActionEvent e) {
         Button pButton = (Button)e.getSource();
 
@@ -46,11 +57,20 @@ public class TagDialogController {
         }
     }
 
+    /**
+     * Updates the displayed list of tags
+     * @param tags new tags to be displayed
+     */
     public void updateTagList(List<String> tags) {
         ObservableList<String> displayTags = FXCollections.observableArrayList(tags);
         possibleTagList.setItems(displayTags);
     }
     
+    /**
+     * Converts the selected tag and entered value to an array of strings
+     * @param buttonType
+     * @return array of two strings for the tag and tag value
+     */
     public String[] convertResult(ButtonType buttonType) {
         if (ButtonType.OK.equals(buttonType)) {
             if (tagValueInput.getText().length() > 0) {

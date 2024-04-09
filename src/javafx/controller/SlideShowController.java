@@ -9,6 +9,9 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * @author Bryan Mulholland
+ */
 public class SlideShowController {
     
     @FXML Button forwardButton;
@@ -23,11 +26,19 @@ public class SlideShowController {
         this.index = 0;
     }
 
+    /**
+     * Sets the photo list for the slideshow and updates the first photo
+     * @param photos
+     */
     public void setPhotos(List<Photo> photos) {
         this.photos = photos;
         this.updateDisplayPhoto(photos.get(index));
     }
 
+    /**
+     * Updates the displayed photo to the newPhoto
+     * @param newPhoto
+     */
     public void updateDisplayPhoto(Photo newPhoto) {
         Image image = new Image(newPhoto.getPhotoFile().toURI().toString(),
                 1080, // width
@@ -37,6 +48,10 @@ public class SlideShowController {
         this.imageDisplay.setImage(image);
     }
 
+    /**
+     * Increments index and updates the displayed photo to the next in the slideshow
+     * @param e
+     */
     public void handleForwardClick(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -49,6 +64,10 @@ public class SlideShowController {
         }
     }
 
+    /**
+     * Decrements the index and updates the displayed photo to the previous in the slideshow
+     * @param e
+     */
     public void handleBackClick(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 

@@ -23,6 +23,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
+/**
+ * @author Bryan Mulholland
+ */
 public class ApplicationController {
     
     private static ApplicationController instance;
@@ -52,6 +55,9 @@ public class ApplicationController {
         instance = this;
     }
 
+    /**
+     * @return the instance of the controller
+     */
     public static ApplicationController getInstance()
     {
         if (instance == null)
@@ -62,6 +68,10 @@ public class ApplicationController {
         return instance;
     }
 
+    /**
+     * Adds listeners to the lists that show/hide buttons when they can/cannot be used.
+     * Sets the cell factory for the photo list
+     */
     @FXML
     public void initialize()
     {
@@ -128,12 +138,20 @@ public class ApplicationController {
         });
     }
 
+    /**
+     * Updates the ListView of albums
+     * @param albums
+     */
     public void updateAlbumList(List<Album> albums)
     {
         ObservableList<Album> displayAlbums = FXCollections.observableArrayList(albums);
         this.albumList.setItems(displayAlbums);
     }
 
+    /**
+     * Updates the ListView of tags for the selected photo
+     * @param selectedPhoto
+     */
     public void updateTagList(Photo selectedPhoto) {
         List<String> tagStrings = new ArrayList<>();
         selectedPhoto.getTags().entrySet().forEach(entry -> {
@@ -144,11 +162,19 @@ public class ApplicationController {
         this.tagList.setItems(displayTags);
     }
 
+    /**
+     * Updates the ListView of photos with the given photos
+     * @param photos
+     */
     public void updatePhotoList(List<Photo> photos) {
         ObservableList<Photo> displayPhotos = FXCollections.observableArrayList(photos);
         this.photoList.setItems(displayPhotos);
     }
 
+    /**
+     * Opens the search dialog
+     * @param e
+     */
     public void handleSearchClick(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -162,6 +188,10 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Prompts the user for an album name and creates an album if the name is unique for that user
+     * @param e
+     */
     public void handleAlbumCreate(ActionEvent e)
     {
         Button pButton = (Button) e.getSource();
@@ -188,6 +218,10 @@ public class ApplicationController {
         updateAlbumList(Application.getInstance().getAlbumManager().getLoadedAlbums());
     }
 
+    /**
+     * Prompts the user for a new album name and changes the name
+     * @param e
+     */
     public void handleAlbumRename(ActionEvent e)
     {
         Button pButton = (Button) e.getSource();
@@ -205,6 +239,10 @@ public class ApplicationController {
         updateAlbumList(Application.getInstance().getAlbumManager().getLoadedAlbums());
     }
 
+    /**
+     * Prompts the user for confirmation then deletes the selected album
+     * @param e
+     */
     public void handleAlbumDelete(ActionEvent e)
     {
         Button pButton = (Button) e.getSource();
@@ -232,6 +270,10 @@ public class ApplicationController {
         updateAlbumList(Application.getInstance().getAlbumManager().getLoadedAlbums());
     }
 
+    /**
+     * Opens the add tag dialog for the selected photo
+     * @param e
+     */
     public void handleAddTag(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -246,6 +288,10 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Removes the selected tag from the selected photo
+     * @param e
+     */
     public void handleRemoveTag(ActionEvent e)
     {
         Button pButton = (Button) e.getSource();
@@ -255,6 +301,10 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Opens a file chooser for the user to add an image to the selected album
+     * @param e
+     */
     public void handleAddPhoto(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -271,6 +321,10 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Removes the selected photo from the current open album
+     * @param e
+     */
     public void handleRemovePhoto(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -284,6 +338,10 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Prompts the user for an album name to copy the selected photo to
+     * @param e
+     */
     public void handleCopyPhoto(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -313,6 +371,10 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Prompts the user for an album name to move the selected photo to
+     * @param e
+     */
     public void handleMovePhoto(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -343,6 +405,10 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Prompts the user for a new caption for the selected photo
+     * @param e
+     */
     public void handleChangeCaption(ActionEvent e)
     {
         Button pButton = (Button)e.getSource();
@@ -361,6 +427,10 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Opens the slide show dialog for the selected album
+     * @param e
+     */
     public void handleSlideShowClick(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -371,6 +441,10 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Opens the inspect image dialog for the selected image
+     * @param e
+     */
     public void handleInspectImageClick(ActionEvent e) {
         Button pButton = (Button) e.getSource();
 
@@ -381,6 +455,10 @@ public class ApplicationController {
         }
     }
 
+    /**
+     * Tells the application to log the user out
+     * @param e
+     */
     public void handleLogout(ActionEvent e)
     {
         Button pButton = (Button) e.getSource();

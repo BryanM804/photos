@@ -6,6 +6,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * @author Bryan Mulholland
+ */
 public class InspectImageController {
     
     @FXML ImageView imageDisplay;
@@ -16,6 +19,10 @@ public class InspectImageController {
 
     }
 
+    /**
+     * Sets the ImageView and description for the image
+     * @param photo
+     */
     public void setImage(Photo photo) {
         Image image = new Image(photo.getPhotoFile().toURI().toString(),
                 800, // width

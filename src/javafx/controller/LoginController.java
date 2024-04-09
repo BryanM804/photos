@@ -9,12 +9,19 @@ import launcher.Session;
 
 import java.util.regex.Pattern;
 
+/**
+ * @author Bryan Mulholland
+ * @author Andrew Bonasera
+ */
 public class LoginController
 {
     @FXML Button loginButton;
     @FXML TextField usernameInput;
     @FXML Text errorContainer;
 
+    /**
+     * Checks the entered username and starts a session if it is valid
+     */
     public void login()
     {
         String username = this.usernameInput.getText();
@@ -32,9 +39,19 @@ public class LoginController
         }
 
         Session session = new Session(username);
-        Launcher.launch(session);
+
+        if (session.isValidUser()) {
+            Launcher.launch(session);
+        } else {
+            this.errorContainer.setText("User does not exist!");
+        }
     }
 
+    /**
+     * Checks if the string contains only alphanumeric characters
+     * @param str
+     * @return true if str contains no special characters
+     */
     public boolean isAlphaNumeric(String str)
     {
         return Pattern.matches("^[a-zA-Z0-9]+$", str);
