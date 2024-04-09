@@ -30,7 +30,8 @@ public class SlideShowController {
      * Sets the photo list for the slideshow and updates the first photo
      * @param photos
      */
-    public void setPhotos(List<Photo> photos) {
+    public void setPhotos(List<Photo> photos)
+    {
         this.photos = photos;
         this.updateDisplayPhoto(photos.get(index));
     }

@@ -436,6 +436,12 @@ public class ApplicationController {
 
         if (pButton == slideShowButton) {
             Album selectedAlbum = albumList.getSelectionModel().getSelectedItem();
+
+            if (selectedAlbum.getPhotos().isEmpty())
+            {
+                return;
+            }
+
             SlideShowDialog slideDialog = new SlideShowDialog(pButton.getScene().getWindow(), selectedAlbum.getPhotos());
             slideDialog.showAndWait();
         }

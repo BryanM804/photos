@@ -15,7 +15,8 @@ import javafx.scene.control.TextField;
 /**
  * @author Bryan Mulholland
  */
-public class TagDialogController {
+public class TagDialogController
+{
     @FXML TextField customTagInput;
     @FXML TextField tagValueInput;
     @FXML Button addTagButton;
@@ -23,7 +24,8 @@ public class TagDialogController {
     @FXML ListView<String> possibleTagList;
 
     @FXML
-    public void initialize() {
+    public void initialize()
+    {
 
     }
 
@@ -61,7 +63,8 @@ public class TagDialogController {
      * Updates the displayed list of tags
      * @param tags new tags to be displayed
      */
-    public void updateTagList(List<String> tags) {
+    public void updateTagList(List<String> tags)
+    {
         ObservableList<String> displayTags = FXCollections.observableArrayList(tags);
         possibleTagList.setItems(displayTags);
     }
