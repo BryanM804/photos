@@ -7,6 +7,7 @@ import javafx.scene.text.Text;
 import launcher.Launcher;
 import launcher.Session;
 
+import java.io.File;
 import java.util.regex.Pattern;
 
 /**
@@ -40,7 +41,14 @@ public class LoginController
 
         Session session = new Session(username);
 
-        if (session.isValidUser()) {
+        if (session.isValidUser())
+        {
+            File userDataFile = session.getUserDataFile();
+            if (userDataFile.exists())
+            {
+                session = Session.deserialize(userDataFile);
+            }
+
             Launcher.launch(session);
         } else {
             this.errorContainer.setText("User does not exist!");

@@ -1,16 +1,22 @@
 package launcher;
 
-import java.io.File;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public final class Session
+public final class Session implements Serializable
 {
+    private static final long serialVersionUID = -2257026348827015659L;
+
     private final String username;
     private final File userFile;
+    private final File userDataFile;
     private final boolean userExists;
 
     private final boolean admin;
+
+    private final List<String> tags = new ArrayList<>();
 
     public Session(String username)
     {
@@ -19,11 +25,16 @@ public final class Session
         File workingDir = new File("").getAbsoluteFile();
         File userFile = new File(workingDir, "data/" + username);
 
+        this.userDataFile = new File(userFile, username + ".dat");
+
         this.userFile = userFile;
 
         this.userExists = userFile.exists();
 
         this.admin = username.equalsIgnoreCase("admin");
+
+        this.tags.add("Location");
+        this.tags.add("Person");
     }
 
     public String getUsername()
@@ -34,6 +45,11 @@ public final class Session
     public File getUserFile()
     {
         return this.userFile;
+    }
+
+    public File getUserDataFile()
+    {
+        return this.userDataFile;
     }
 
     public boolean isValidUser() {
@@ -75,5 +91,27 @@ public final class Session
         File userFile = new File(workingDir, "data/" + username);
 
         userFile.delete();
+    }
+
+    public void serialize(File dataFile)
+    {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(dataFile)))
+        {
+            oos.writeObject(this);
+        } catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Session deserialize(File dataFile)
+    {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(dataFile)))
+        {
+            return (Session) ois.readObject();
+        } catch (IOException | ClassNotFoundException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }
