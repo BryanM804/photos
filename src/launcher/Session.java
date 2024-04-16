@@ -91,8 +91,21 @@ public final class Session implements Serializable
 
         File workingDir = new File("").getAbsoluteFile();
         File userFile = new File(workingDir, "data/" + username);
+        System.out.println(userFile.toString());
+        
+        deleteDiretory(userFile);
+    }
+    
+    private void deleteDiretory(File file) {
+        File[] dirContents = file.listFiles();
 
-        userFile.delete();
+        if (dirContents != null) {
+            for (File f : dirContents) {
+                deleteDiretory(f);
+            }
+        }
+
+        file.delete();
     }
 
     public void serialize(File dataFile)
