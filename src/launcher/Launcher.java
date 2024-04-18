@@ -43,7 +43,7 @@ public final class Launcher extends javafx.application.Application
     public static void launch(Session session)
     {
         Application application = new Application(session);
-        application.openGUI(mainStage, session.isAdmin());
+        application.openGUI(mainStage);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() ->
         {

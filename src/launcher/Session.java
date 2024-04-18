@@ -31,9 +31,9 @@ public final class Session implements Serializable
 
         this.userFile = userFile;
 
-        this.userExists = userFile.exists();
-
         this.admin = username.equalsIgnoreCase("admin");
+
+        this.userExists = userFile.exists() || this.admin;
 
         this.tags.add("Location");
         this.tags.add("Person");
@@ -110,6 +110,8 @@ public final class Session implements Serializable
 
     public void serialize(File dataFile)
     {
+        if (this.admin) return;
+
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(dataFile)))
         {
             oos.writeObject(this);

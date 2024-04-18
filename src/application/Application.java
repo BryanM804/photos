@@ -25,23 +25,25 @@ public final class Application
 
         this.albumManager = new AlbumManager();
 
-        if (session.isFirstTime())
-        {
-            this.albumManager.cacheStockPhotos();
-        } else
-        {
-            this.albumManager.cacheAllAlbums();
+        if (!this.session.isAdmin()) {
+            if (session.isFirstTime())
+            {
+                this.albumManager.cacheStockPhotos();
+            } else
+            {
+                this.albumManager.cacheAllAlbums();
+            }
         }
     }
 
     /**
      * Opens the main application GUI
      */
-    public void openGUI(Stage mainStage, boolean isAdmin)
+    public void openGUI(Stage mainStage)
     {
         FXMLLoader loader = new FXMLLoader();
 
-        if (isAdmin) {
+        if (this.session.isAdmin()) {
             loader.setLocation(Launcher.class.getResource("../javafx/view/Admin.fxml"));
         } else {
             loader.setLocation(Launcher.class.getResource("../javafx/view/Application.fxml"));
@@ -59,7 +61,7 @@ public final class Application
             throw new RuntimeException(e);
         }
 
-        if (!isAdmin) ApplicationController.getInstance().updateAlbumList(this.albumManager.getLoadedAlbums());
+        if (!this.session.isAdmin()) ApplicationController.getInstance().updateAlbumList(this.albumManager.getLoadedAlbums());
     }
 
     /**
